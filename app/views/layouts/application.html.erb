@@ -1,7 +1,8 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>HobbyMates</title>
+    <title><%= full_title(yield(:title)) %></title>
+
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
@@ -10,6 +11,12 @@
   </head>
 
   <body>
+    <header>
+      <%= link_to "Hobby Mates!", root_path, id: "logo" %>
+      <hr>
+      <hr width="50%" align="left">
+      <hr width="30%" align="left">
+    </header>
     <%= yield %>
   </body>
 </html>
