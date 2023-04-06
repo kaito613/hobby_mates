@@ -17,6 +17,9 @@ gem "devise"
 
 group :development, :test do
   gem "debug", platforms: %i[ mri mingw x64_mingw ]
+  gem "byebug", platforms: [:mri, :mingw, :x64_mingw], group: :test
+  gem "pry-byebug", group: :test
+  gem "pry-rails", group: :test
   gem "rspec-rails"
   gem "factory_bot_rails"
 end

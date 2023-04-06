@@ -11,12 +11,7 @@
   </head>
 
   <body>
-    <header>
-      <%= link_to "Hobby Mates!", root_path, id: "logo" %>
-      <hr>
-      <hr width="50%" align="left">
-      <hr width="30%" align="left">
-    </header>
+    <%= render "layouts/header" %>
     <%= yield %>
   </body>
 </html>
