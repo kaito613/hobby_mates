@@ -15,4 +15,8 @@ class User < ApplicationRecord
     validates :password, presence: true,
               format: { with: VALID_PASSWORD_REGEX,
               message: "は半角6~12文字英大文字・小文字・数字それぞれ1文字以上含む必要があります"}
+
+  def current_user_in_mypage(params_user_id)
+    self.id == params_user_id.to_i
+  end
 end
