@@ -1,22 +1,15 @@
 require 'rails_helper'
 
 RSpec.describe User, type: :model do
-  let(:name) { "テスト太郎" }
-  let(:email) { "test@example.com" }
-  let(:password){ "password" }
-  let(:user){ create(:user) }
-
-  describe ".first" do
-
-    subject {described_class.first}
-
-    it "ユーザーが作成されている" do
-      user
-      expect(User.first).to eq user
-    end
-  end
 
   describe "validation" do
+
+    context "全てのカラムが有効な場合" do
+      let(:user){create(:user)}
+      it "ユーザーが作成される" do
+        expect(user).to be_valid
+      end
+    end
 
     describe "name" do
       context "空白の場合" do
@@ -65,6 +58,7 @@ RSpec.describe User, type: :model do
         end
     end
 
+    # 下記のコードはコピペ丸出しなので、書き直し
     describe "password" do
       context "空白の場合" do
         let(:user){build(:user, password: "")}
