@@ -1,0 +1,9 @@
+<h1>掲示板の詳細</h1>
+<h2>show.html.erb</h2>
+
+<%= @board.title %>
+<%= @board.id %>
+
+<%= form_with(model: @board, url: edit_board_path(@board), method: :get) do |f| %>
+  <%= f.submit "編集" %>
+<% end %>

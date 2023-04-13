@@ -1,0 +1,23 @@
+<h1>編集画面</h1>
+<h2>edit.html.erb</h2>
+
+<%= form_with(model: @board, url:board_path ) do |f|%>
+
+  <%= f.label :title %>
+  <%= f.text_field :title %>
+
+  <%= f.label :img %>
+  <%= f.text_field :img %>
+
+  <%= f.label :description %>
+  <%= f.text_field :description %>
+
+  <%= f.submit "編集" %>
+
+
+<% end %>
+
+<%= form_with(model: @board, url: board_path(@board), method: :delete) do |f| %>
+  <%= f.submit "削除" %>
+<% end %>
+
