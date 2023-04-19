@@ -3,6 +3,16 @@
 
 <% if @is_user_in_mypage %> <!-- ユーザーがログインしているか調べる -->
   <h4><%= @user.name %></h4>
+
+  <% my_boards = @user.boards%>
+  <% my_boards.each do |board| %>
+  <%= board.id %>
+  <%= board.title %>
+<% end %>
+
+
 <% else %>
   <h2>THIS IS 他人のページ</h2>
 <% end %>
+
+

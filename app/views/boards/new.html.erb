@@ -1,0 +1,25 @@
+<h1>新規掲示板作成</h1>
+<h2>new.html.erb</h2>
+
+<%= form_with(model: @board, url: boards_path) do |f|%>
+
+<div class="field">
+  <%= f.label :タイトル %><br/>
+  <%= f.text_field :title %>
+</div>
+
+<div class="field">
+  <%= f.label :イメージ画像 %><br/>
+  <%= f.text_field :img %>
+</div>
+
+<div class="filed">
+  <%= f.label :紹介文 %><br/>
+  <%= f.text_field :description %>
+</div>
+
+<div class="actions">
+  <%= f.submit "新規投稿" %>
+</div>
+<% end %>
+

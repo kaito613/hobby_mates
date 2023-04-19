@@ -1,0 +1,31 @@
+<h1>編集画面</h1>
+<h2>edit.html.erb</h2>
+
+<%= form_with(model: @board, url:board_path ) do |f|%>
+
+<div class="field">
+  <%= f.label :タイトル %><br/>
+  <%= f.text_field :title %>
+</div>
+
+<div class="field">
+  <%= f.label :イメージ画像 %><br/>
+  <%= f.text_field :img %>
+</div>
+
+<div class="field">
+  <%= f.label :紹介文 %><br/>
+  <%= f.text_field :description %>
+</div>
+
+<div class="actions">
+  <%= f.submit "更新" %>
+</div>
+<% end %>
+
+<%= form_with(model: @board, url: board_path(@board), method: :delete) do |f| %>
+  <div class="actions">
+    <%= f.submit "削除" %>
+  </div>
+<% end %>
+
