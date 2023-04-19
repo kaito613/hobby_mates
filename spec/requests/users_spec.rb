@@ -7,11 +7,10 @@ RSpec.describe "Users", type: :request do
   describe "show" do
     context "ユーザーがログインしている場合" do
       let(:user){create(:user)}
-      let(:user2){create(:user)}
+      let(:other_user){create(:user)}
       before {sign_in user}
-
       context "自分のページにアクセスした場合" do
-        it "status200 OKが返ってくる" do
+        it "リクエストが成功する" do
           get "/users/#{user.id}"
           expect(response).to have_http_status(:success)
         end
@@ -24,12 +23,12 @@ RSpec.describe "Users", type: :request do
       end
 
       context "他人のページにアクセスした場合" do
-        it "status200 OKが返ってくる" do
-          get "/users/#{user2.id}"
+        it "リクエストが成功する" do
+          get "/users/#{other_user.id}"
           expect(response).to have_http_status(:success)
         end
         it "is_user_in_mypageにfalseが代入される" do
-          get "/users/#{user2.id}"
+          get "/users/#{other_user.id}"
           is_user_in_mypage = controller.instance_variable_get("@is_user_in_mypage")
           expect(is_user_in_mypage).to eq false
         end
@@ -37,9 +36,9 @@ RSpec.describe "Users", type: :request do
     end
 
     context "未登録ユーザーの場合" do
+      # ログインはしていない
       let(:user){create(:user)}
-
-      it "status200 OKが返ってくる" do
+      it "リクエストが成功する" do
         get "/users/#{user.id}"
         expect(response).to have_http_status(:success)
       end

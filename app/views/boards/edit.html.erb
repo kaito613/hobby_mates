@@ -3,21 +3,29 @@
 
 <%= form_with(model: @board, url:board_path ) do |f|%>
 
-  <%= f.label :title %>
+<div class="field">
+  <%= f.label :タイトル %><br/>
   <%= f.text_field :title %>
+</div>
 
-  <%= f.label :img %>
+<div class="field">
+  <%= f.label :イメージ画像 %><br/>
   <%= f.text_field :img %>
+</div>
 
-  <%= f.label :description %>
+<div class="field">
+  <%= f.label :紹介文 %><br/>
   <%= f.text_field :description %>
+</div>
 
-  <%= f.submit "編集" %>
-
-
+<div class="actions">
+  <%= f.submit "更新" %>
+</div>
 <% end %>
 
 <%= form_with(model: @board, url: board_path(@board), method: :delete) do |f| %>
-  <%= f.submit "削除" %>
+  <div class="actions">
+    <%= f.submit "削除" %>
+  </div>
 <% end %>
 

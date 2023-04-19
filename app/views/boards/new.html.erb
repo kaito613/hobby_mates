@@ -3,16 +3,23 @@
 
 <%= form_with(model: @board, url: boards_path) do |f|%>
 
-  <%= f.label :title %>
+<div class="field">
+  <%= f.label :タイトル %><br/>
   <%= f.text_field :title %>
+</div>
 
-  <%= f.label :img %>
+<div class="field">
+  <%= f.label :イメージ画像 %><br/>
   <%= f.text_field :img %>
+</div>
 
-  <%= f.label :description %>
+<div class="filed">
+  <%= f.label :紹介文 %><br/>
   <%= f.text_field :description %>
+</div>
 
+<div class="actions">
   <%= f.submit "新規投稿" %>
-
+</div>
 <% end %>
 

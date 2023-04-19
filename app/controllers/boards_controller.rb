@@ -7,11 +7,12 @@ class BoardsController < ApplicationController
   def create
     if current_user.nil?
       redirect_to user_session_path
+      return
     end
-
-    @boards = current_user.boards.build(board_params)  
-    if @boards.save  
-      redirect_to board_path(@boards)
+    
+    @board = current_user.boards.build(board_params)  
+    if @board.save  
+      redirect_to board_path(@board)
     else
       redirect_to new_board_path
     end
@@ -22,7 +23,11 @@ class BoardsController < ApplicationController
   end
 
   def show
-    @board = Board.find(params[:id])
+    @board = Board.find_by(id: params[:id])
+    
+    if @board.nil?
+      redirect_to boards_path
+    end
   end
 
   def edit
@@ -44,17 +49,31 @@ class BoardsController < ApplicationController
   end
 
   def update
-    @board = Board.find(params[:id])
-    @board.update(board_params)
+    
+    return if current_user.nil?
+
+    @board = Board.find_by(id: params[:id])
+
+    return if @board.nil?
+
+    if current_user.id == @board.user_id
+      @board.update(board_params)
+      redirect_to board_path(@board)
+    end
   end
 
   def destroy
-    @board = Board.find(params[:id])
+
+    return if current_user.nil?
+
+    @board = Board.find_by(id: params[:id])
+
+    return if @board.nil?
+
     if current_user.id == @board.user_id
       @board.destroy!
       redirect_to boards_path
     end
-
   end
 
   private
