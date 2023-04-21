@@ -2,7 +2,6 @@ require 'rails_helper'
 
 RSpec.describe "Boards", type: :request do
   include Devise::Test::IntegrationHelpers
-  RSpec::Matchers.define_negated_matcher :not_change, :change
   describe "new" do
   end
 
@@ -13,7 +12,6 @@ RSpec.describe "Boards", type: :request do
     context "ユーザーがログインしている場合" do
       let(:user){create(:user)}
       before{sign_in user}
-      let(:board){build(:board, user: user)}
 
       context "新規投稿が成功した場合" do
         # it "掲示板が作成され保存される" do
@@ -29,7 +27,7 @@ RSpec.describe "Boards", type: :request do
         
         it "掲示板の詳細画面に遷移する" do
           subject
-          # boardにテーブルないのレコードを代入している
+          # boardにテーブルのレコードを代入している
           board = Board.last
           # board_pathに引数としてboardを渡している
           expect(response).to redirect_to(board_path(board))
@@ -53,7 +51,7 @@ RSpec.describe "Boards", type: :request do
         get boards_path
         expect(response).to have_http_status(:success)
       end
-      it "変数に掲示板が全て格納されているか" do
+      it "変数に掲示板が全て降順で格納されているか" do
         get boards_path
         boards = controller.instance_variable_get("@boards")
         expect(boards).to eq Board.all.order(created_at: :desc)
@@ -88,17 +86,17 @@ RSpec.describe "Boards", type: :request do
         sign_in user
       end
 
-      it "編集ページへのリクエストが成功する" do
+      it "編集画面へのリクエストが成功する" do
         get edit_board_path(board)
         expect(response).to have_http_status(:success)
       end
-      context "存在しない掲示板にアクセスした場合" do
+      context "存在しない掲示板の編集画面にアクセスした場合" do
         it "新規投稿画面に遷移する" do
           get edit_board_path(board.id + 1)
           expect(response).to redirect_to new_board_path
         end
       end
-      context "他人の掲示板にアクセスした場合" do
+      context "他人の掲示板の編集画面にアクセスした場合" do
         it "新規投稿画面に遷移する" do
           get edit_board_path(other_user_board)
           expect(response).to redirect_to new_board_path
@@ -117,16 +115,26 @@ RSpec.describe "Boards", type: :request do
   describe "update" do
     let(:user){create(:user)}
     let(:board){create(:board, user: user)}
+    let(:other_user_board){create(:board)}
     new_title = "new_title"
     let(:valid_request) do
       patch board_path(board), params: {board: {title: new_title}}
       end
-    context "リクエストが成功した場合" do
+    context "ユーザーがログインしている場合" do
       before{sign_in user}  
-      it "レコードの中身が書き換わる" do
-        valid_request
-        board.reload
-        expect(board.title).to eq "new_title"
+      context "リクエストが成功した場合" do
+        it "レコードの中身が書き換わる" do
+          valid_request
+          board.reload
+          expect(board.title).to eq new_title
+        end
+      end
+      context "他人の掲示板にリクエストを送った場合" do
+        it "レコードが書き換わらない" do
+          patch board_path(other_user_board), params: {board: {title: new_title}}
+          board.reload
+          expect(board.title).to_not eq new_title
+        end
       end
     end
     context "ログインしていないユーザーがリクエストを送った場合"do
@@ -147,20 +155,28 @@ RSpec.describe "Boards", type: :request do
   end
 
   describe "destroy" do
-    context "掲示板が削除された場合" do
-      let(:user){create(:user)}
+    let(:user){create(:user)}
+    let!(:board){create(:board, user: user)}
+    let!(:other_user_board){create(:board)}
+    context "ユーザーがログインしている場合" do
       before{sign_in user}
-      # let!でitの前に変数が定義される。letのみだと呼び出された瞬間に作られる。
-      let!(:board){create(:board, user: user)}
-      it "Boardテーブルからレコードがひとつ減る" do
-        # delete board_path(board)
-        # expect(Board.count).to eq 0
-        #let!ではなく、itの中にboardを定義しても良い
-        expect{delete board_path(board)}.to change{Board.count}.by(-1)
+      context "掲示板が削除された場合" do
+        # let!でitの前に変数が定義される。letのみだと呼び出された瞬間に作られる。
+        it "Boardテーブルからレコードが1つ減る" do
+          # delete board_path(board)
+          # expect(Board.count).to eq 0
+          #let!ではなく、itの中にboardを定義しても良い
+          expect{delete board_path(board)}.to change{Board.count}.by(-1)
+        end
+      end
+      context "他人の掲示板にリクエストを送った場合" do
+        it "レコードが削除されない" do
+          expect{delete board_path(other_user_board)}.to change{Board.count}.by(0)
+        end
       end
     end
+    
     context "ログインしていないユーザーがリクエストを行った場合" do
-      let!(:board){create(:board)}
       it "レコードが削除されない" do
         # 下記のコード実行前にboardのレコードが必要であるため、let!でitを
         # 実行した時点でboardを作成している。ただ単にboardを記述するだけでも
@@ -169,7 +185,6 @@ RSpec.describe "Boards", type: :request do
       end
     end
     context "存在しない掲示板のリクエストが送られた場合" do
-      let!(:board){create(:board)}
       it "レコードが削除されない" do
         expect{delete board_path(board.id + 1)}.to change{Board.count}.by(0)
       end

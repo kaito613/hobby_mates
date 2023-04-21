@@ -10,7 +10,8 @@ class BoardsController < ApplicationController
       return
     end
     
-    @board = current_user.boards.build(board_params)  
+    @board = current_user.boards.build(board_params)
+
     if @board.save  
       redirect_to board_path(@board)
     else
@@ -43,7 +44,7 @@ class BoardsController < ApplicationController
       return
     end
 
-    if current_user.id != @board.user_id 
+    unless current_user.id == @board.user_id 
       redirect_to new_board_path
     end
   end
@@ -57,7 +58,7 @@ class BoardsController < ApplicationController
     return if @board.nil?
 
     if current_user.id == @board.user_id
-      @board.update(board_params)
+      @board.update!(board_params)
       redirect_to board_path(@board)
     end
   end
