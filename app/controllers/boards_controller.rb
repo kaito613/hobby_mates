@@ -28,6 +28,8 @@ class BoardsController < ApplicationController
     
     if @board.nil?
       redirect_to boards_path
+    else
+      @comment = Comment.new(board_id: @board.id)
     end
   end
 

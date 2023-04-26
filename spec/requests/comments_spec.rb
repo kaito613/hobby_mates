@@ -3,25 +3,9 @@ require 'rails_helper'
 RSpec.describe "Comments", type: :request do
   include Devise::Test::IntegrationHelpers
 
-  describe "index" do
-    before do
-      create(:comment)
-    end
-    context "コメント一覧ページにアクセスした場合" do
-      it "リクエストが成功する" do
-        get comments_path
-        expect(response).to have_http_status(:success)
-      end
-      it "変数にコメントが全て降順で格納されているか" do
-        get comments_path
-        comments = controller.instance_variable_get("@comments")
-        expect(comments).to eq Comment.all.order(created_at: :desc)
-      end
-    end
-  end
-
   describe "create" do
-    subject {post comments_path, params: {comment: {message: "hello", board_id: board.id}}}
+    
+    subject {post board_comments_path(board), params: {comment: {message: "hello", user_id: user.id}}}
     let(:board){create(:board)}
     let(:user){create(:user)}
 
@@ -32,9 +16,9 @@ RSpec.describe "Comments", type: :request do
         it "コメントのレコードが1増える" do
           expect {subject}.to change(Comment, :count).by(1)
         end
-        it "コメント一覧画面に遷移する" do
+        it "掲示板の詳細画面に遷移する" do
           subject
-          expect(response).to redirect_to(comments_path)
+          expect(response).to redirect_to(board_path(board))
         end
       end
     end
@@ -65,13 +49,13 @@ RSpec.describe "Comments", type: :request do
       context "存在しないコメントの編集画面にアクセスした場合" do
         it "新規投稿画面に遷移する" do
           get edit_comment_path(comment.id + 1)
-          expect(response).to redirect_to(new_comment_path)
+          expect(response).to redirect_to(boards_path)
         end
       end
       context "他人のコメントの編集画面にアクセスした場合" do
         it "新規投稿画面に遷移する" do
           get edit_comment_path(other_user_comment)
-          expect(response).to redirect_to(new_comment_path)
+          expect(response).to redirect_to(boards_path)
         end
       end
     end
@@ -93,15 +77,16 @@ RSpec.describe "Comments", type: :request do
     end
     context "存在しないコメントの詳細画面にアクセスした場合" do
       
-      it "コメント一覧ページに遷移する" do
+      it "掲示板の一覧ページに遷移する" do
         get comment_path(comment.id + 1)
-        expect(response).to redirect_to(comments_path)
+        expect(response).to redirect_to(boards_path)
       end
     end
   end
 
   describe "update" do
     let(:user){create(:user)}
+    let(:board){create(:board)}
     let(:comment){create(:comment, user: user)}
     let(:other_user_comment){create(:comment)}
     # new_message = "new_message"
