@@ -1,15 +1,34 @@
 <header>
-      <%= link_to "Hobby Mates!", root_path, id: "logo" %>
+      <h1><%= link_to "Hobby Mates!", root_path, id: "logo" %></h1>
 
       <% if user_signed_in? %> <!-- ユーザーがログインしているか調べる -->
         <!-- ユーザーがログインしていた時の処理 -->
-        <h4> メールアドレス： <%= current_user.email %> </h4>
-        <%= link_to "ログアウト", destroy_user_session_path, method: :delete %> <!-- ログアウトをする -->
+        <h4 class="login_state">ログインユーザー:<%= link_to current_user.name, user_path(current_user) %> </h4>
+        <nav>
+          <ul>
+            <li><%= link_to "新規投稿", new_board_path %></li>
+            <li><%= link_to "ログアウト", destroy_user_session_path, method: :delete %></li>
+          </ul>
+        </nav>
       <% else %>
-          <!-- ユーザーがログインしていなかった時の処理 -->
-        <h2> 現在ログインしていません </h2>
-        <%= link_to "ログイン", new_user_session_path, class: 'post' %> <!-- ログイン画面に移行する -->
-        <%= link_to "新規登録", new_user_registration_path, class: 'post' %> <!-- 新規登録画面に移行する -->
+        <h4 class="login_state">ログインしていません</h4>
+        <nav>
+          <li><%= link_to "ログイン", new_user_session_path, class: 'post' %></li>
+          <li><%= link_to "新規登録", new_user_registration_path, class: 'post' %></li>
+        </nav>
       <% end %>
-      <hr>
     </header>
+    
+    <style>
+      header {
+        background-color: #f4f4f4;
+        height: auto;
+      }
+      header h1 {
+        font-size: 32px;
+      }
+      .login_state {
+        color: red;
+        float: right;
+      }
+      </style>

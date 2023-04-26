@@ -1,25 +1,21 @@
 class CommentsController < ApplicationController
   
-  def index
-    @comments = Comment.all.order(created_at: :desc)
-  end
-
   def create
     if current_user.nil?
       redirect_to user_session_path
       return
     end
-    @comment = current_user.comments.build(comment_params)
+
+    @board  = Board.find(params[:board_id])
+    
+    @comment = Comment.new(create_comment_params)
+
 
     if @comment.save
-      redirect_to comments_path
+      redirect_to board_path(@board)
     else
-      redirect_to new_comment_path
+      redirect_to board_path(@board)
     end
-  end
-
-  def new
-    @comment = Comment.new
   end
 
   def edit
@@ -31,12 +27,12 @@ class CommentsController < ApplicationController
     @comment = Comment.find_by(id: params[:id])
 
     if @comment.nil?
-      redirect_to new_comment_path
+      redirect_to boards_path
       return
     end
 
     unless current_user.id == @comment.user_id
-      redirect_to new_comment_path
+      redirect_to boards_path
     end
   end
   
@@ -44,7 +40,7 @@ class CommentsController < ApplicationController
     @comment = Comment.find_by(id: params[:id])
 
     if @comment.nil?
-      redirect_to comments_path
+      redirect_to boards_path
     end
   end
 
@@ -56,8 +52,8 @@ class CommentsController < ApplicationController
     return if @comment.nil?
 
     if current_user.id == @comment.user_id
-      @comment.update!(comment_params)
-      redirect_to comments_path
+      @comment.update!(update_comment_params)
+      redirect_to board_path
     end
   end
 
@@ -70,13 +66,18 @@ class CommentsController < ApplicationController
 
     if current_user.id == @comment.user_id
       @comment.destroy!
-      redirect_to comments_path
+      redirect_to board_path
     end
   end
 
   private
 
-  def comment_params
+  def update_comment_params
     params.require(:comment).permit( :message, :board_id )
+  end
+
+  def create_comment_params
+    # paramsの中のcommentキーのmessageを許可している。それにboard_idとuser_idをキーに指定しparamsのboard_idとcurrent_user.idを値として渡している。
+    params.require(:comment).permit( :message).merge( board_id: params[:board_id], user_id: current_user.id)
   end
 end

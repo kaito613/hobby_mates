@@ -1,0 +1,13 @@
+<h1>コメント投稿</h1>
+
+<%= form_with(model: @comment, url: comments_path) do |f|%>
+
+<div class="field">
+  <%= f.label :メッセージ%><br/>
+  <%= f.text_field :message %>
+</div>
+
+<div class="actions">
+  <%= f.submit "新規投稿" %>
+</div>
+<% end %>

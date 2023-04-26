@@ -1,4 +1,10 @@
 <% provide(:title, "TOP") %>
 
-<h1>募集掲示板掲載予定</h1>
-<p><a href="/boards/new" >掲示板新規投稿</a></p>
+<h1>募集掲示板</h1>
+
+  <% @boards.each do |board| %>
+    <div>
+      <h4>タイトル:<%= link_to board.title, board_path(board) %></h4>
+      <p>投稿主:<%= link_to board.user.name, user_path(board.user) %></p>
+    </div>
+  <% end %>

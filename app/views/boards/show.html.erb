@@ -1,9 +1,31 @@
 <h1>掲示板の詳細</h1>
-<h2>show.html.erb</h2>
 
-<%= @board.title %>
-<%= @board.id %>
+<%= @board.id %><br>
+<%= @board.title %><br>
+<%= @board.img%><br>
+<%= @board.description %>
 
 <%= form_with(model: @board, url: edit_board_path(@board), method: :get) do |f| %>
   <%= f.submit "編集" %>
+<% end %>
+<div>
+  <ol>
+    <% @board.comments.each do |comment| %>
+      <li><%= comment.message %></li>
+        <%= comment.user.name %>
+        <%= comment.created_at.strftime('%Y/%m/%d %H:%M')  %>
+    <% end %>
+  </ol>
+</div>
+
+<%= form_with(model: @comment, url: board_comments_path(@board)) do |f|%>
+
+<div class="filed">
+  <%= f.label :コメント %><br/>
+  <%= f.text_field :message, placeholder: "コメントを入力してください" %>
+</div>
+
+<div class="actions">
+  <%= f.submit "新規投稿" %>
+</div>
 <% end %>
