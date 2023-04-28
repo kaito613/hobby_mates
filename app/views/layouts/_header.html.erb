@@ -1,34 +1,56 @@
-<header>
-      <h1><%= link_to "Hobby Mates!", root_path, id: "logo" %></h1>
+<nav class="navbar is-warning" class="navbar" role="navigation" aria-label="main navigation">
+  <div class="navbar-brand">
+    <div class="navbar-item">
+      <%= link_to image_tag("linkedin_banner_image_1.png"), root_path%>
+    </div>
 
-      <% if user_signed_in? %> <!-- ユーザーがログインしているか調べる -->
-        <!-- ユーザーがログインしていた時の処理 -->
-        <h4 class="login_state">ログインユーザー:<%= link_to current_user.name, user_path(current_user) %> </h4>
-        <nav>
-          <ul>
-            <li><%= link_to "新規投稿", new_board_path %></li>
-            <li><%= link_to "ログアウト", destroy_user_session_path, method: :delete %></li>
-          </ul>
-        </nav>
-      <% else %>
-        <h4 class="login_state">ログインしていません</h4>
-        <nav>
-          <li><%= link_to "ログイン", new_user_session_path, class: 'post' %></li>
-          <li><%= link_to "新規登録", new_user_registration_path, class: 'post' %></li>
-        </nav>
-      <% end %>
-    </header>
-    
-    <style>
-      header {
-        background-color: #f4f4f4;
-        height: auto;
-      }
-      header h1 {
-        font-size: 32px;
-      }
-      .login_state {
-        color: red;
-        float: right;
-      }
-      </style>
+    <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false" data-target="navbarBasicExample">
+      <span aria-hidden="true"></span>
+      <span aria-hidden="true"></span>
+      <span aria-hidden="true"></span>
+    </a>
+  </div>
+
+  <div id="navbarBasicExample" class="navbar-menu">
+    <div class="navbar-start">
+      <div class="navbar-item">
+          <%= link_to current_user.name, user_path(current_user) if user_signed_in? %>
+      </div>
+
+      <div class="navbar-item has-dropdown is-hoverable">
+        <a class="navbar-link">
+          More
+        </a>
+
+        <div class="navbar-dropdown">
+          <div class="navbar-item">
+            <%= link_to "新規投稿", new_board_path %>
+          </div>
+          <a class="navbar-item">
+            Jobs
+          </a>
+          <a class="navbar-item">
+            Contact
+          </a>
+          <hr class="navbar-divider">
+          <a class="navbar-item">
+            Report an issue
+          </a>
+        </div>
+      </div>
+    </div>
+
+  <div class="navbar-end">
+    <div class="navbar-item">
+      <div class="buttons">
+        <div class="button is-primary">
+          <% if user_signed_in? %>
+            <%= link_to "ログアウト", destroy_user_session_path %>
+          <% else %>
+            <%= link_to "ログイン", user_session_path%>
+          <% end %>
+        </div>
+      </div>
+    </div>
+  </div>
+</nav>
