@@ -19,10 +19,6 @@ class BoardsController < ApplicationController
     end
   end
 
-  def index
-    @boards = Board.all.order(created_at: :desc)
-  end
-
   def show
     @board = Board.find_by(id: params[:id])
     

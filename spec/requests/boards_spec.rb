@@ -42,23 +42,6 @@ RSpec.describe "Boards", type: :request do
     end
   end
 
-  describe "index" do
-    before do
-      create(:board)
-    end
-    context "掲示板一覧ページにアクセスした場合" do
-      it "リクエストが成功する" do
-        get boards_path
-        expect(response).to have_http_status(:success)
-      end
-      it "変数に掲示板が全て降順で格納されているか" do
-        get boards_path
-        boards = controller.instance_variable_get("@boards")
-        expect(boards).to eq Board.all.order(created_at: :desc)
-      end
-    end
-  end
-
   describe "show" do
     let(:board){create(:board)}
     context "掲示板詳細画面にアクセスした場合" do
