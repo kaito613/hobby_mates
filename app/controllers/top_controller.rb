@@ -1,6 +1,6 @@
 class TopController < ApplicationController
 
   def home
-    @boards = Board.all.order(created_at: :desc)
+    @boards = Board.page(params[:page]).per(5).order(created_at: :desc) 
   end
 end
