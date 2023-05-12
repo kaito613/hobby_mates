@@ -24,14 +24,14 @@
 
         <div class="navbar-dropdown">
           <div class="navbar-item">
+            <%= link_to "会員登録", new_user_registration_path %>
+          </div>
+          <div class="navbar-item">
+            <%= link_to "全ユーザー", users_path %>
+          </div>
+          <div class="navbar-item">
             <%= link_to "新規投稿", new_board_path %>
           </div>
-          <a class="navbar-item">
-            Jobs
-          </a>
-          <a class="navbar-item">
-            Contact
-          </a>
           <hr class="navbar-divider">
           <a class="navbar-item">
             Report an issue
