@@ -4,6 +4,7 @@
           <div class="columns">
             <div class="column left">
               <h1 class="title is-1"><%= @user.name %></h1>
+              <small><%= link_to @user.followings.count, followings_user_path(@user) %>フォロー<%= link_to @user.followers.count, followers_user_path(@user) %>フォロワー</small>
               <h2 class="subtitle colored is-4">募集中の掲示板</h2>
               <% my_boards = @user.boards %>
               <% my_boards.order(updated_at: :desc).limit(5).each do |board| %>
@@ -12,8 +13,18 @@
               <% end %>
             </div>
             <div class="column right has-text-centered">
-              <h1 class="title is-4">Sign up today</h1>
-              <p class="description">Lorem ipsum dolor, sit amet consectetur adipisicing elit</p>
+              <h1 class="title is-4">フォロー機能</h1>
+              <% if current_user %>
+                <% unless @user == current_user %>
+                  <% if @user.is_followed_by?(current_user) %>
+                    <% relationship = Relationship.find_by(following_id: current_user.id, follower_id: @user.id) %>
+                    <%= button_to "unfollow", user_relationship_path(@user, relationship), method: :delete %>
+                  <% else %>
+                    <%= button_to "follow", user_relationships_path(@user), method: :post %>
+                  <% end %>
+                <% end %>
+              <% end %>
+              <p class="description"></p>
               <form>
                 <div class="field">
                   <div class="control">

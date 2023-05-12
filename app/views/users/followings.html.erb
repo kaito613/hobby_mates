@@ -1,0 +1,38 @@
+<div>
+  <div>
+    <div>
+      <h1>FOLLOWING</h1>
+      <table>
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          <% @users.each do |user| %>
+            <tr>
+              <td>
+                <%= link_to user_path(user) do %>
+                  <%= user.name %>
+                <% end %>
+              </td>
+              <td>
+              <% if current_user %>
+                <% unless user == current_user %>
+                  <% if user.is_followed_by?(current_user) %>
+                    <% relationship = Relationship.find_by(following_id: current_user.id, follower_id: user.id) %>
+                    <%= button_to "フォロー解除", user_relationship_path(user, relationship), method: :delete %>
+                  <% else %>
+                    <%= button_to "フォロー", user_relationships_path(user), method: :post %>
+                  <% end %>
+                <% end %>
+              <% end %>
+              </td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
