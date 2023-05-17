@@ -21,7 +21,10 @@ class BoardsController < ApplicationController
 
   def show
     @board = Board.find_by(id: params[:id])
-    
+
+    return if current_user.nil?
+    @board_favorite = BoardFavorite.find_by(user_id: current_user.id, board_id: @board.id)
+
     if @board.nil?
       redirect_to boards_path
     else

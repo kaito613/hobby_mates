@@ -1,0 +1,7 @@
+<h1>お気に入り一覧</h1>
+
+<% @board_favorites.each do |favorite| %>
+  <div class="box">
+    <p><%= link_to favorite.board.title, board_path(favorite.board) %></p>  
+  </div>
+<% end %>
