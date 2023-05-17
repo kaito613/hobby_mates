@@ -1,8 +1,8 @@
 <h1>コメントのページ</h1>
 
 <% @comments.each do |comment| %>
-    <div>
-      <h4>タイトル:<%= link_to comment.message, comment_path(comment) %></h4>
-      <p>投稿主:<%= link_to comment.user.name, user_path(comment.user) %></p>
-    </div>
-  <% end %>
+  <div>
+    <h4>タイトル:<%= link_to comment.message, comment_path(comment) %></h4>
+    <p>投稿主:<%= link_to comment.user.name, user_path(comment.user) %></p>
+  </div>
+<% end %>

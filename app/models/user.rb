@@ -4,8 +4,9 @@ class User < ApplicationRecord
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :validatable
   
-  has_many :boards
-  has_many :comments
+  has_many :boards, dependent: :destroy
+  has_many :comments, dependent: :destroy
+
   
   validates :name, presence: true, length: {maximum: 50}
   
@@ -37,4 +38,7 @@ class User < ApplicationRecord
   def is_followed_by?(user)
     followed_relationships.find_by(following_id: user.id).present?
   end
+
+  has_many :board_favorites, dependent: :destroy
+  has_many :board_favorited, through: :board_favorites, source: :board
 end

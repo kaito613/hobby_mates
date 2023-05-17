@@ -1,9 +1,21 @@
+<div class="box">
 <h1>掲示板の詳細</h1>
+
+<div>
+  <% if current_user %>
+    <% if @board_favorite %>
+      <%= button_to "お気に入り解除", board_favorite_path(@board_favorite), method: :delete %>
+    <% else %>
+      <%= button_to "お気に入り登録", board_favorites_path(board_favorite:{board_id: @board.id}), method: :post %>
+    <% end %>
+  <% end %>
+</div>
 
 <%= @board.id %><br>
 <%= @board.title %><br>
 <%= @board.img%><br>
 <%= @board.description %>
+
 
 <%= form_with(model: @board, url: edit_board_path(@board), method: :get) do |f| %>
   <%= f.submit "編集" %>
@@ -29,3 +41,4 @@
   <%= f.submit "新規投稿" %>
 </div>
 <% end %>
+</div>

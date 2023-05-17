@@ -7,6 +7,7 @@
       <h4>タイトル:<%= link_to board.title, board_path(board) %></h4>
       <p>投稿主:<%= link_to board.user.name, user_path(board.user) %></p>
       <p>更新時間:<%= board.updated_at.strftime('%Y/%m/%d %H:%M') %></p>
+      <small>お気に入り数:<%= board.board_favorites.count %></small>
     </div>
   <% end %>
 

@@ -73,11 +73,11 @@ class CommentsController < ApplicationController
   private
 
   def update_comment_params
-    params.require(:comment).permit( :message, :board_id )
+    params.require(:comment).permit(:message, :board_id)
   end
 
   def create_comment_params
     # paramsの中のcommentキーのmessageを許可している。それにboard_idとuser_idをキーに指定しparamsのboard_idとcurrent_user.idを値として渡している。
-    params.require(:comment).permit( :message).merge( board_id: params[:board_id], user_id: current_user.id)
+    params.require(:comment).permit(:message).merge( board_id: params[:board_id], user_id: current_user.id)
   end
 end
